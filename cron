@@ -1,30 +1,33 @@
-# Edit this file to introduce tasks to be run by cron.               
-#                                                                    
-# Each task to run has to be defined through a single line           
-# indicating with different fields when the task will be run         
-# and what command to run for the task                               
-#                                                                    
-# To define the time you can provide concrete values for             
-# minute (m), hour (h), day of month (dom), month (mon),             
-# and day of week (dow) or use '*' in these fields (for 'any').#     
-# Notice that tasks will be started based on the cron's system       
-# daemon's notion of time and timezones.                             
-#                                                                    
-# Output of the crontab jobs (including errors) is sent through      
-# email to the user the crontab file belongs to (unless redirected). 
-#                                                                    
-# For example, you can run a backup of all your user accounts        
-# at 5 a.m every week with:                                          
-# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/                    
-#                                                                    
-# For more information see the manual pages of crontab(5) and cron(8)
-#                                                                    
-# m h  dom mon dow   command                                         
-#* * * * *      gphoto2 --capture-image-and-download --filename "/va$
-2 22 * * * gphoto2 --set-config /main/capturesettings/exposurecompen$
-2 6 * * * gphoto2 --set-config /main/capturesettings/exposurecompens$
-#*/10 * * * * gphoto2 --capture-image-and-download --filename "/var/$
-*/10 * * * * /home/pi/gphoto_long_time.sh                            
-*/15 * * * * /home/pi/wundergroundftp.sh                             
-0 0 * * * rm /home/pi/tmpfi*                                         
-*/5 * * * *  /usr/bin/curl --silent http://bristenblick.ch/weather/p$
+#!/bin/bash
+#
+# ----------------------------------------------------------------------------------------------------------$
+# This script capable to executed from cron, capturing camera image,
+# copying localy and uploading that to a given FTP server
+# ----------------------------------------------------------------------------------------------------------$
+#
+# HUN: Idokep webkamera FTP feltoltes automatizalo script RaspberryPi
+# szamitogephez, kozonseges fenykepezogep vezerlesere (Canon S5 IS
+# geppel tesztelve)
+#
+# Before run install: sudo apt-get install gphoto2 usbmount
+
+SUNRISE=`sunwait -p 47N 9E 2>&1 | grep 'Sun rises' | cut -d' ' -f 22`
+SUNRISE=`echo $SUNRISE | cut -b1-2`:`echo $SUNRISE | cut -b3-4`:00
+SUNSET=`sunwait -p 47N 9E 2>&1 | grep 'Sun rises' | cut -d' ' -f 25`
+SUNSET=`echo $SUNSET | cut -b1-2`:`echo $SUNSET | cut -b3-4`:00
+echo $SUNRISE
+echo $SUNSET
+
+DATENOW="$(date +%H:%M:%S)"
+echo $DATENOW
+#if [[ "$DATENOW" < "17:40:00" && "$DATENOW" > "06:30:00" ]]; then
+if [[ "$DATENOW" < "$SUNSET" && "$DATENOW" > "$SUNRISE" ]]; then
+
+    gphoto2 --set-config /main/capturesettings/exposurecompensation=25 # day time
+
+else
+    gphoto2 --set-config /main/capturesettings/exposurecompensation=15 #night time
+
+fi
+
+gphoto2 --capture-image-and-download --filename "/var/www/html/webcam.jpg" --force-overwrite
