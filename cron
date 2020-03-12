@@ -27,4 +27,4 @@
 */10 * * * * /home/pi/gphoto_long_time.sh
 */15 * * * * /home/pi/wundergroundftp.sh
 0 0 * * * rm /home/pi/tmpfi*
-*/5 * * * *  /usr/bin/curl --silent http://bristenblick.ch/weather/plugins/meteohub/update.php?pass=DUuivi3wBqHZKad &>/dev/null
+*/5 * * * *  /usr/bin/curl --silent $meteohubURL &>/dev/null
