@@ -28,7 +28,3 @@
 */15 * * * * /home/pi/wundergroundftp.sh                             
 0 0 * * * rm /home/pi/tmpfi*                                         
 */5 * * * *  /usr/bin/curl --silent http://bristenblick.ch/weather/p$
-                                                                     
-                                                                     
-^G Get Help  ^O Write Out ^W Where Is  ^K Cut Text  ^J Justify       
-^X Exit      ^R Read File ^\ Replace   ^U Uncut Text^T To Spell
