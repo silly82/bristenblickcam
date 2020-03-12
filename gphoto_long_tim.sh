@@ -1,5 +1,4 @@
-
-                                    #!/bin/bash                                                          
+#!/bin/bash                                                          
 #                                                                    
 # ------------------------------------------------------------------$
 # This script capable to executed from cron, capturing camera image, 
