@@ -28,3 +28,6 @@
 */15 * * * * /home/pi/wundergroundftp.sh
 0 0 * * * rm /home/pi/tmpfi*
 */5 * * * *  /usr/bin/curl --silent $meteohubURL &>/dev/null
+*/10 * * * * /home/pi/longexp.sh
+*/01,11,21,31,41,51 * * * * /home/pi/upload.sh
+8 23 1 * * /home/pi/timesync.sh
